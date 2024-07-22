@@ -87,9 +87,9 @@ const PersonForm: React.FC<PersonFormProps> = ({ onSubmit }) => {
           <h3 className="w-25">Photo preview</h3>
           <div className="w-75 align-items-start d-flex">
               {person.image ?
-                  <img src={person.image} alt='' style={{width: '125px', height: '125px', marginRight: 'auto'}}/>
+                  <img src={person.image} alt='' style={{width: '125px', height: '125px'}}/>
               :
-                  <div className="border border-2 border-black" style={{width: '125px', height: '125px', marginRight: 'auto'}}>
+                  <div className="border border-2 border-black" style={{width: '125px', height: '125px'}}>
                       Your photo
                   </div>}
           </div>
