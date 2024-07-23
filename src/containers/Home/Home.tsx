@@ -25,21 +25,29 @@ const Home = () => {
     await dispatch(fetchPeople());
   };
 
+  console.log(people.length)
+
   return (
     <div>
-      {peopleLoading ? (
-        <Spinner />
-      ) : (
+      {people.length !== 0 ? (
         <>
-          {people.map((person: Person) => (
-            <PeopleItem
-              key={person.id}
-              person={person}
-              deleteLoading={deleteLoading}
-              onDelete={() => removePerson(person.id)}
-            />
-          ))}
+          {peopleLoading ? (
+            <Spinner />
+          ) : (
+            <>
+              {people.map((person: Person) => (
+                <PeopleItem
+                  key={person.id}
+                  person={person}
+                  deleteLoading={deleteLoading}
+                  onDelete={() => removePerson(person.id)}
+                />
+              ))}
+            </>
+          )}
         </>
+      ) : (
+        <h1>No contacts</h1>
       )}
     </div>
   );
