@@ -1,17 +1,30 @@
 import React, { useState } from 'react';
 import { ApiPerson } from '../../types';
+import ButtonSpinner from '../Spinner/ButtonSpinner';
 
 export interface PersonFormProps {
   onSubmit: (person: ApiPerson) => void;
+  existingPerson?: ApiPerson;
+  isLoading?: boolean;
 }
 
-const PersonForm: React.FC<PersonFormProps> = ({ onSubmit }) => {
-  const [person, setPerson] = useState<ApiPerson>({
-    name: '',
-    phone: '',
-    email: '',
-    image: '',
-  });
+const emptyState: ApiPerson = {
+  name: '',
+  phone: '',
+  email: '',
+  image: '',
+};
+
+const PersonForm: React.FC<PersonFormProps> = ({
+  onSubmit,
+  existingPerson,
+  isLoading,
+}) => {
+  const initialState: ApiPerson = existingPerson
+    ? { ...existingPerson }
+    : emptyState;
+
+  const [person, setPerson] = useState<ApiPerson>(initialState);
 
   const changeInfo = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -32,9 +45,11 @@ const PersonForm: React.FC<PersonFormProps> = ({ onSubmit }) => {
 
   return (
     <form onSubmit={onFormSubmit}>
-      <h4>Add new contacts</h4>
+      <h4> {existingPerson ? 'Edit contact' : 'Add new contacts'}</h4>
       <div className="form-group d-flex justify-content-evenly mb-4">
-        <h4 className="w-25"><label htmlFor="name">Name</label></h4>
+        <h4 className="w-25">
+          <label htmlFor="name">Name</label>
+        </h4>
         <input
           type="text"
           name="name"
@@ -46,7 +61,9 @@ const PersonForm: React.FC<PersonFormProps> = ({ onSubmit }) => {
         />
       </div>
       <div className="form-group d-flex justify-content-evenly mb-4">
-        <h4 className="w-25"><label htmlFor="phone">Phone</label></h4>
+        <h4 className="w-25">
+          <label htmlFor="phone">Phone</label>
+        </h4>
         <input
           type="text"
           name="phone"
@@ -58,7 +75,9 @@ const PersonForm: React.FC<PersonFormProps> = ({ onSubmit }) => {
         />
       </div>
       <div className="form-group d-flex justify-content-evenly mb-4">
-        <h4 className="w-25"><label htmlFor="email">Email</label></h4>
+        <h4 className="w-25">
+          <label htmlFor="email">Email</label>
+        </h4>
         <input
           type="email"
           name="email"
@@ -70,11 +89,11 @@ const PersonForm: React.FC<PersonFormProps> = ({ onSubmit }) => {
         />
       </div>
       <div className="form-group d-flex justify-content-evenly mb-4">
-          <h4 className="w-25">
-              <label htmlFor="image">Image</label>
-          </h4>
-          <input
-              type="url"
+        <h4 className="w-25">
+          <label htmlFor="image">Image</label>
+        </h4>
+        <input
+          type="url"
           name="image"
           id="image"
           required
@@ -84,19 +103,31 @@ const PersonForm: React.FC<PersonFormProps> = ({ onSubmit }) => {
         />
       </div>
       <div className="form-group d-flex justify-content-evenly mb-4">
-          <h3 className="w-25">Photo preview</h3>
-          <div className="w-75 align-items-start d-flex">
-              {person.image ?
-                  <img src={person.image} alt='' style={{width: '125px', height: '125px'}}/>
-              :
-                  <div className="border border-2 border-black" style={{width: '125px', height: '125px'}}>
-                      Your photo
-                  </div>}
-          </div>
-
+        <h3 className="w-25">Photo preview</h3>
+        <div className="w-75 align-items-start d-flex">
+          {person.image ? (
+            <img
+              src={person.image}
+              alt=""
+              style={{ width: '125px', height: '125px' }}
+            />
+          ) : (
+            <div
+              className="border border-2 border-black"
+              style={{ width: '125px', height: '125px' }}
+            >
+              Your photo
+            </div>
+          )}
+        </div>
       </div>
-        <button type="submit" className="btn btn-primary mt-2">
-        Create
+      <button
+        type="submit"
+        className="btn btn-primary mt-2"
+        disabled={isLoading}
+      >
+        {isLoading && <ButtonSpinner />}
+        {existingPerson ? 'Update' : 'Create'}
       </button>
     </form>
   );
