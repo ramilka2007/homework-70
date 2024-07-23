@@ -25,8 +25,6 @@ const Home = () => {
     await dispatch(fetchPeople());
   };
 
-  console.log(people.length)
-
   return (
     <div>
       {people.length !== 0 ? (
